@@ -1,0 +1,6 @@
+API_NAME = "BatDesk API"
+API_VERSION = "1.0.0"
+
+DISK_PATH = "/"
+
+CPU_INTERVAL = 0

@@ -1,2 +1,5 @@
-from app.routers.status import router
-print(router)
+
+import psutil
+
+
+print(psutil.sensors_battery())

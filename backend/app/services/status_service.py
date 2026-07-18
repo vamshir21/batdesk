@@ -1,6 +1,7 @@
 import time
 import psutil
 
+from app.utils.conversions import bytes_to_gb
 from app.models.status import (
     CPU,
     Memory,
@@ -21,14 +22,15 @@ def get_cpu() -> CPU:
     )
 
 
+
 def get_memory() -> Memory:
     memory = psutil.virtual_memory()
 
     return Memory(
-        total_gb=round(memory.total / (1024 ** 3), 2),
-        used_gb=round(memory.used / (1024 ** 3), 2),
-        free_gb=round(memory.free / (1024 ** 3), 2),
-        available_gb=round(memory.available / (1024 ** 3), 2),
+        total_gb=bytes_to_gb(memory.total),
+        used_gb=bytes_to_gb(memory.used),
+        free_gb=bytes_to_gb(memory.free),
+        available_gb=bytes_to_gb(memory.available),
         percent=memory.percent,
     )
 
@@ -37,9 +39,9 @@ def get_disk() -> Disk:
     disk = psutil.disk_usage("/")
 
     return Disk(
-        total_gb=round(disk.total / (1024 ** 3), 2),
-        used_gb=round(disk.used / (1024 ** 3), 2),
-        free_gb=round(disk.free / (1024 ** 3), 2),
+        total_gb=bytes_to_gb(disk.total),
+        used_gb=bytes_to_gb(disk.used),
+        free_gb=bytes_to_gb(disk.free),
         percent=disk.percent,
     )
 
@@ -49,7 +51,7 @@ def get_battery() -> Battery:
 
     return Battery(
         available=battery is not None,
-        percent=battery.percent if battery else None,
+        percent=round(battery.percent, 2) if battery else None,
         charging=battery.power_plugged if battery else None,
     )
 
