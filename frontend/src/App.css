@@ -1,0 +1,114 @@
+.shell {
+  height: 100%;
+  display: grid;
+  grid-template-rows: 52px 1fr 64px;
+  background: #0b0d10;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  border-bottom: 1px solid #23262d;
+}
+
+.brand {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.pc-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #9aa0a6;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #5f6368;
+}
+
+.dot.on {
+  background: #34a853;
+}
+
+.dashboard {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: 12px;
+  padding: 12px;
+  min-height: 0;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 10px;
+  min-height: 0;
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #16181d;
+  border: 1px solid #23262d;
+  min-height: 0;
+}
+
+.tile-label {
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: #9aa0a6;
+}
+
+.tile-value {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.quick-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.quick {
+  height: 56px;
+  border: 0;
+  border-radius: 12px;
+  background: #1e2128;
+  color: #e8eaed;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+.bottom-nav {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border-top: 1px solid #23262d;
+}
+
+.nav-btn {
+  border: 0;
+  background: transparent;
+  color: #9aa0a6;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.nav-btn.active {
+  color: #e8eaed;
+  background: #16181d;
+}
