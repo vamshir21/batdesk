@@ -30,6 +30,11 @@ Backend URL, optional API key, poll interval, theme. Send clipboard text, deskto
 ---
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/1c3168ca-efcc-4c36-8c81-743d91495ef7" />
 
+<img width="1920" height="1080" alt="Screenshot From 2026-08-16 16-16-05" src="https://github.com/user-attachments/assets/787d091a-fe59-4704-95ab-b5e6b1e5f42b" />
+
+<img width="1920" height="1080" alt="Screenshot From 2026-08-16 16-16-10" src="https://github.com/user-attachments/assets/fd758c4d-d5bc-4934-a73c-1ca4864bb47e" />
+
+<img width="1920" height="1080" alt="Screenshot From 2026-08-16 16-16-16" src="https://github.com/user-attachments/assets/fc1291fd-db7e-4bfb-be88-ca6f055f3ebd" />
 
 ## Architecture
 
