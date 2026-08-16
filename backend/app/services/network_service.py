@@ -129,18 +129,11 @@ def scan_wifi() -> list[WifiNetwork]:
     return sorted(networks, key=lambda x: x.signal, reverse=True)
 
 
-def connect_wifi(ssid: str, password: str) -> NetworkActionResponse:
-    _run_command(
-        [
-            "nmcli",
-            "device",
-            "wifi",
-            "connect",
-            ssid,
-            "password",
-            password,
-        ]
-    )
+def connect_wifi(ssid: str, password: str | None = None) -> NetworkActionResponse:
+    command = ["nmcli", "device", "wifi", "connect", ssid]
+    if password:
+        command.extend(["password", password])
+    _run_command(command)
 
     return NetworkActionResponse(
         success=True,

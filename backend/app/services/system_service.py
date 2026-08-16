@@ -1,52 +1,23 @@
 import subprocess
 
-
-def lock_screen():
-    subprocess.run(
-        ["loginctl", "lock-session"],
-        check=True
-    )
-
-    return {
-        "success": True,
-        "message": "Screen locked successfully"
-    }
+from app.models.common import ActionResponse
 
 
-
-def shutdown_system():
-    subprocess.run(
-        ["systemctl", "poweroff"],
-        check=True
-    )
-
-    return {
-        "success": True,
-        "message": "System shutting down."
-    }
+def lock_screen() -> ActionResponse:
+    subprocess.run(["loginctl", "lock-session"], check=True)
+    return ActionResponse(success=True, message="Screen locked")
 
 
-def restart_system():
-    subprocess.run(
-        ["systemctl", "reboot"],
-        check=True
-    )
-
-    return {
-        "success": True,
-        "message": "System restarting."
-    }
+def shutdown_system() -> ActionResponse:
+    subprocess.Popen(["systemctl", "poweroff"])
+    return ActionResponse(success=True, message="System shutting down")
 
 
+def restart_system() -> ActionResponse:
+    subprocess.Popen(["systemctl", "reboot"])
+    return ActionResponse(success=True, message="System restarting")
 
 
-def sleep_system():
-    subprocess.run(
-        ["systemctl", "suspend"],
-        check=True
-    )
-
-    return {
-        "success": True,
-        "message": "System is going to sleep."
-    }
+def sleep_system() -> ActionResponse:
+    subprocess.Popen(["systemctl", "suspend"])
+    return ActionResponse(success=True, message="System going to sleep")

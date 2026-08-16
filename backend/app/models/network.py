@@ -1,9 +1,5 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
-
-# =========================
-# Wi-Fi Models
-# =========================
 
 class WifiStatus(BaseModel):
     enabled: bool
@@ -20,12 +16,8 @@ class WifiNetwork(BaseModel):
 
 class WifiConnectRequest(BaseModel):
     ssid: str
-    password: str
+    password: str | None = None
 
-
-# =========================
-# Bluetooth Models
-# =========================
 
 class BluetoothStatus(BaseModel):
     enabled: bool
@@ -42,10 +34,6 @@ class BluetoothConnectRequest(BaseModel):
     mac_address: str
 
 
-# =========================
-# Network Interface Models
-# =========================
-
 class NetworkInterface(BaseModel):
     name: str
     type: str
@@ -58,19 +46,6 @@ class ActiveConnection(BaseModel):
     connection_type: str
     device: str
 
-
-# =========================
-# Request Models
-# =========================
-
-class BrightnessRequest(BaseModel):
-    """(Reserved for future use if needed; remove if unused.)"""
-    value: int = Field(ge=0, le=100)
-
-
-# =========================
-# Common Response
-# =========================
 
 class NetworkActionResponse(BaseModel):
     success: bool

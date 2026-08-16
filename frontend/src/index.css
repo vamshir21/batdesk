@@ -12,8 +12,14 @@ body,
 }
 
 body {
-  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
-  background: #0b0d10;
-  color: #e8eaed;
-  -webkit-tap-highlight-color: transparent;
+  font-family: "Rajdhani", "Segoe UI", sans-serif;
+  background: #050505;
+  color: #f4ead0;
+  overflow: hidden;
+}
+
+button,
+input,
+select {
+  font: inherit;
 }
