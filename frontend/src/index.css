@@ -1,0 +1,25 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  font-family: "Rajdhani", "Segoe UI", sans-serif;
+  background: #050505;
+  color: #f4ead0;
+  overflow: hidden;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}

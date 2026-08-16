@@ -26,9 +26,7 @@ def _current_percentage() -> int:
 
 
 def get_brightness() -> BrightnessStatus:
-    return BrightnessStatus(
-        brightness=_current_percentage()
-    )
+    return BrightnessStatus(brightness=_current_percentage())
 
 
 def set_brightness(level: int) -> BrightnessStatus:
@@ -36,21 +34,12 @@ def set_brightness(level: int) -> BrightnessStatus:
         ["brightnessctl", "set", f"{level}%"],
         check=True,
     )
-
     return get_brightness()
 
 
 def increase_brightness(step: int) -> BrightnessStatus:
-    current = _current_percentage()
-
-    new_level = min(current + step, 100)
-
-    return set_brightness(new_level)
+    return set_brightness(min(_current_percentage() + step, 100))
 
 
 def decrease_brightness(step: int) -> BrightnessStatus:
-    current = _current_percentage()
-
-    new_level = max(current - step, 0)
-
-    return set_brightness(new_level)
+    return set_brightness(max(_current_percentage() - step, 0))
