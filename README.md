@@ -28,6 +28,8 @@ Host, kernel, clocks, memory, disk, GPU (`nvidia-smi` when present), and network
 Backend URL, optional API key, poll interval, theme. Send clipboard text, desktop notifications, and URLs to the PC. Launch Files, Browser, Terminal, Settings, Spotify, or VS Code.
 
 ---
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/1c3168ca-efcc-4c36-8c81-743d91495ef7" />
+
 
 ## Architecture
 
@@ -172,6 +174,7 @@ This API can lock, sleep, shut down, and change Wi-Fi. Treat it as a **LAN contr
 | `BATDESK_CPU_INTERVAL` | Seconds for `psutil.cpu_percent` (default `0.1`) |
 
 Frontend settings (theme, refresh, server URL, API key) are stored in the tablet browser’s `localStorage`.
+
 
 ---
 
