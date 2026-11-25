@@ -367,9 +367,16 @@ main {
 }
 
 .btn-grid.compact,
-.power-grid,
-.launch-grid {
+.power-grid {
   grid-template-columns: 1fr 1fr;
+}
+
+.launch-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.launch-grid.streaming {
+  margin-bottom: 8px;
 }
 
 .quick,
@@ -478,6 +485,11 @@ main {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
+  overflow: auto;
+}
+
+.launch-panel {
+  grid-column: 1 / -1;
 }
 
 .settings-grid.three {
@@ -618,8 +630,18 @@ input[type="range"] {
 }
 
 .media-row {
-  grid-template-columns: 52px 1fr 52px;
+  grid-template-columns: 1fr 1.4fr 1fr;
   margin-top: 8px;
+}
+
+.media-row.extra {
+  grid-template-columns: 1fr 1fr 1fr;
+  margin-top: 8px;
+}
+
+.quick.seek {
+  font-size: 18px;
+  letter-spacing: 0.04em;
 }
 
 .power-grid {

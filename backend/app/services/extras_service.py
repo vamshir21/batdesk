@@ -1,5 +1,4 @@
 import subprocess
-from pathlib import Path
 
 from app.models.common import ActionResponse
 
@@ -7,11 +6,19 @@ _inhibit_proc: subprocess.Popen | None = None
 
 LAUNCHERS: dict[str, list[str]] = {
     "files": ["nautilus"],
-    "browser": ["xdg-open", "https://www.google.com"],
+    "browser": ["brave-browser"],
     "terminal": ["gnome-terminal"],
     "settings": ["gnome-control-center"],
     "spotify": ["spotify"],
     "code": ["code"],
+}
+
+BRAVE_BINS = ("brave-browser", "brave-browser-stable", "brave")
+
+BRAVE_SITES: dict[str, str] = {
+    "hotstar": "https://www.jiohotstar.com",
+    "youtube": "https://www.youtube.com",
+    "netflix": "https://www.netflix.com",
 }
 
 
@@ -61,16 +68,37 @@ def set_clipboard(text: str) -> ActionResponse:
     raise RuntimeError("No clipboard tool (wl-copy, xclip, or xsel)")
 
 
+def _open_in_brave(url: str) -> None:
+    for binary in BRAVE_BINS:
+        try:
+            subprocess.Popen([binary, url])
+            return
+        except FileNotFoundError:
+            continue
+    raise RuntimeError("Brave browser is not installed")
+
+
 def open_url(url: str) -> ActionResponse:
     if not url.startswith(("http://", "https://")):
         raise RuntimeError("URL must start with http:// or https://")
-    subprocess.Popen(["xdg-open", url])
-    return ActionResponse(success=True, message="Opened on the PC")
+    _open_in_brave(url)
+    return ActionResponse(success=True, message="Opened in Brave")
 
 
 def launch_app(app: str) -> ActionResponse:
+    site = BRAVE_SITES.get(app)
+    if site:
+        _open_in_brave(site)
+        return ActionResponse(success=True, message=f"Opening {app} in Brave")
+
     command = LAUNCHERS.get(app)
     if command is None:
         raise RuntimeError("Unknown app")
-    subprocess.Popen(command)
+    try:
+        subprocess.Popen(command)
+    except FileNotFoundError as exc:
+        if app == "browser":
+            _open_in_brave("https://www.google.com")
+            return ActionResponse(success=True, message="Opening Brave")
+        raise RuntimeError(f"{command[0]} is not installed") from exc
     return ActionResponse(success=True, message=f"Launching {app}")

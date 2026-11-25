@@ -6,6 +6,7 @@ from app.http import linux_call
 from app.models.audio import (
     AudioActionResponse,
     AudioStatus,
+    SeekRequest,
     SinkRequest,
     VolumeRequest,
 )
@@ -17,8 +18,10 @@ from app.services.audio_service import (
     next_track,
     play_pause,
     previous_track,
+    seek,
     set_default_sink,
     set_volume,
+    toggle_fullscreen,
     unmute_audio,
     unmute_mic,
 )
@@ -81,6 +84,16 @@ def choose_sink(request: SinkRequest):
 @router.post("/play-pause", response_model=AudioActionResponse)
 def toggle_play_pause():
     return linux_call(play_pause)
+
+
+@router.post("/seek", response_model=AudioActionResponse)
+def seek_media(request: SeekRequest):
+    return linux_call(seek, request.seconds)
+
+
+@router.post("/fullscreen", response_model=AudioActionResponse)
+def fullscreen():
+    return linux_call(toggle_fullscreen)
 
 
 @router.post("/next", response_model=AudioActionResponse)
