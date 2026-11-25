@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import { BatMark } from "./BatMark";
 import { api } from "./api";
 import { Icon } from "./icons";
@@ -12,14 +11,13 @@ import { System } from "./screens/System";
 import type { AudioStatus, BrightnessStatus, Screen, Settings, SystemStatus } from "./types";
 import "./App.css";
 
-const NAV: { id: Screen; label: string; icon: "dash" | "controls" | "network" | "system" | "settings" }[] =
-  [
-    { id: "dash", label: "Cave", icon: "dash" },
-    { id: "controls", label: "Ops", icon: "controls" },
-    { id: "network", label: "Net", icon: "network" },
-    { id: "system", label: "Core", icon: "system" },
-    { id: "settings", label: "Cfg", icon: "settings" },
-  ];
+const NAV: { id: Screen; label: string; code: string; icon: "dash" | "controls" | "network" | "system" | "settings" }[] = [
+  { id: "dash", label: "CAVE", code: "HUD-01", icon: "dash" },
+  { id: "controls", label: "OPS", code: "CTL-02", icon: "controls" },
+  { id: "network", label: "NET", code: "WLS-03", icon: "network" },
+  { id: "system", label: "CORE", code: "SYS-04", icon: "system" },
+  { id: "settings", label: "CFG", code: "CFG-05", icon: "settings" },
+];
 
 function App() {
   const [screen, setScreen] = useState<Screen>("dash");
@@ -111,21 +109,39 @@ function App() {
     }
   }
 
+  const currentNav = NAV.find((n) => n.id === screen);
+
   return (
-    <div className={`shell${connected ? "" : " offline"}`}>
-      <header className="topbar">
-        <div className="brand">
-          <BatMark className="brand-bat" />
-          BatDesk
+    <div className={`batdesk-shell${connected ? " is-connected" : " is-offline"}`}>
+      {/* Background Subtle Cyber Mesh */}
+      <div className="cyber-grid-mesh" aria-hidden="true" />
+
+      {/* Top Tactical Header */}
+      <header className="tactical-topbar">
+        <div className="brand-group">
+          <BatMark className="brand-logo" size={34} />
+          <div className="brand-titles">
+            <h1 className="brand-name">BATDESK</h1>
+            <span className="brand-tagline">COMMAND TERMINAL v2.0</span>
+          </div>
         </div>
-        <div className="pc-status">
-          <span className={`dot${connected ? " on" : ""}`} />
-          <span className="host">{status?.host.hostname ?? "PC"}</span>
-          <span className="ver">v2</span>
+
+        <div className="topbar-center-view">
+          <span className="active-view-code">{currentNav?.code}</span>
+          <span className="active-view-name">/ {currentNav?.label}</span>
+        </div>
+
+        <div className="host-status-badge">
+          <div className={`status-indicator ${connected ? "online" : "offline"}`}>
+            <span className="pulse-dot" />
+            <span className="status-label">{connected ? "ONLINE" : "LINK SEVERED"}</span>
+          </div>
+          <span className="host-name">{status?.host.hostname ?? "DESKTOP-PC"}</span>
         </div>
       </header>
 
-      <main>
+      {/* Main Responsive Viewport */}
+      <main className="tactical-main-viewport">
         {screen === "dash" && (
           <Dashboard
             status={status}
@@ -154,39 +170,64 @@ function App() {
         )}
       </main>
 
+      {/* Toast Notification Alert */}
       {error && (
-        <button type="button" className="toast" onClick={() => setError(null)}>
-          {error}
+        <button
+          type="button"
+          className="tactical-toast"
+          onClick={() => setError(null)}
+          aria-live="assertive"
+        >
+          <span className="toast-badge">ALERT</span>
+          <span className="toast-message">{error}</span>
         </button>
       )}
 
+      {/* Destructive Action Confirmation Dialog */}
       {confirm && (
-        <div className="overlay">
-          <div className="dialog">
-            <p className="panel-kicker">Authorization</p>
-            <p>{confirm.title}</p>
-            <div className="btn-grid compact">
-              <button type="button" className="quick ghost" onClick={() => setConfirm(null)}>
-                Cancel
-              </button>
-              <button type="button" className="quick danger" onClick={() => void confirmYes()}>
-                Do it
-              </button>
+        <div className="tactical-modal-overlay">
+          <div className="tactical-modal-dialog">
+            <div className="dialog-hazard-bar" />
+            <div className="dialog-content">
+              <span className="dialog-kicker">AUTHORIZATION OVERRIDE</span>
+              <h3 className="dialog-title">CONFIRM PROTOCOL EXECUTION</h3>
+              <p className="dialog-prompt">{confirm.title}</p>
+              
+              <div className="dialog-actions">
+                <button
+                  type="button"
+                  className="tactical-btn cancel-btn"
+                  onClick={() => setConfirm(null)}
+                >
+                  ABORT
+                </button>
+                <button
+                  type="button"
+                  className="tactical-btn confirm-btn"
+                  onClick={() => void confirmYes()}
+                >
+                  AUTHORIZE EXECUTION
+                </button>
+              </div>
             </div>
           </div>
         </div>
       )}
 
-      <nav className="bottom-nav">
+      {/* Tactical Bottom Navigation Dock */}
+      <nav className="tactical-navbar" aria-label="Deck Navigation">
         {NAV.map((item) => (
           <button
             type="button"
             key={item.id}
-            className={`nav-btn${screen === item.id ? " active" : ""}`}
+            className={`nav-tab-btn${screen === item.id ? " is-active" : ""}`}
             onClick={() => setScreen(item.id)}
           >
-            <Icon name={item.icon} />
-            {item.label}
+            <div className="nav-icon-wrap">
+              <Icon name={item.icon} />
+            </div>
+            <span className="nav-label">{item.label}</span>
+            <span className="nav-active-pip" />
           </button>
         ))}
       </nav>
