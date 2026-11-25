@@ -38,3 +38,7 @@ class SinkRequest(BaseModel):
 
 class AudioActionResponse(ActionResponse):
     pass
+
+
+class SeekRequest(BaseModel):
+    seconds: int = Field(ge=-60, le=60)

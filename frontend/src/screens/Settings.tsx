@@ -10,9 +10,15 @@ type Props = {
   onError: (message: string) => void;
 };
 
+const STREAMING = [
+  { id: "hotstar", label: "Hotstar" },
+  { id: "youtube", label: "YouTube" },
+  { id: "netflix", label: "Netflix" },
+];
+
 const APPS = [
   { id: "files", label: "Files" },
-  { id: "browser", label: "Browser" },
+  { id: "browser", label: "Brave" },
   { id: "terminal", label: "Terminal" },
   { id: "settings", label: "Settings" },
   { id: "spotify", label: "Spotify" },
@@ -52,7 +58,35 @@ export function SettingsScreen({ settings, onSave, onError }: Props) {
   }
 
   return (
-    <div className="settings-grid three">
+    <div className="settings-grid">
+      <section className="panel form launch-panel">
+        <p className="panel-kicker">Launch</p>
+        <div className="launch-grid streaming">
+          {STREAMING.map((app) => (
+            <button
+              key={app.id}
+              type="button"
+              className="quick"
+              onClick={() => void run(() => api.launch(app.id))}
+            >
+              {app.label}
+            </button>
+          ))}
+        </div>
+        <div className="launch-grid">
+          {APPS.map((app) => (
+            <button
+              key={app.id}
+              type="button"
+              className="quick"
+              onClick={() => void run(() => api.launch(app.id))}
+            >
+              {app.label}
+            </button>
+          ))}
+        </div>
+      </section>
+
       <section className="panel form">
         <p className="panel-kicker">Connection</p>
         <label>
@@ -120,22 +154,6 @@ export function SettingsScreen({ settings, onSave, onError }: Props) {
         <button type="button" className="quick wide" onClick={() => void run(() => api.openUrl(url))}>
           Open
         </button>
-      </section>
-
-      <section className="panel form">
-        <p className="panel-kicker">Launch</p>
-        <div className="launch-grid">
-          {APPS.map((app) => (
-            <button
-              key={app.id}
-              type="button"
-              className="quick"
-              onClick={() => void run(() => api.launch(app.id))}
-            >
-              {app.label}
-            </button>
-          ))}
-        </div>
       </section>
     </div>
   );

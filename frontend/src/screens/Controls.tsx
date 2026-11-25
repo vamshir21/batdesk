@@ -149,15 +149,26 @@ export function Controls({
         <p className="panel-kicker">Media</p>
         <NowPlayingCard track={audio?.now_playing} />
         <div className="media-row">
-          <button type="button" className="quick icon-only" onClick={() => void run(api.previous)}>
-            <Icon name="prev" />
+          <button type="button" className="quick seek" onClick={() => void run(() => api.seek(-10))}>
+            −10
           </button>
           <button type="button" className="quick play" onClick={() => void run(api.playPause)}>
             <Icon name="play" />
             {audio?.now_playing?.playing ? "Pause" : "Play"}
           </button>
-          <button type="button" className="quick icon-only" onClick={() => void run(api.next)}>
-            <Icon name="next" />
+          <button type="button" className="quick seek" onClick={() => void run(() => api.seek(10))}>
+            +10
+          </button>
+        </div>
+        <div className="media-row extra">
+          <button type="button" className="quick" onClick={() => void run(api.previous)}>
+            Prev
+          </button>
+          <button type="button" className="quick" onClick={() => void run(api.fullscreen)}>
+            Full
+          </button>
+          <button type="button" className="quick" onClick={() => void run(api.next)}>
+            Next
           </button>
         </div>
       </section>
