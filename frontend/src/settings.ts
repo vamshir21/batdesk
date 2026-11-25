@@ -3,7 +3,7 @@ import type { Settings, Theme } from "./types";
 const KEY = "batdesk.settings";
 
 const defaults: Settings = {
-  serverUrl: "",
+  serverUrl: "http://192.168.1.14:8000",
   apiKey: "",
   refreshMs: 2000,
   theme: "dark",

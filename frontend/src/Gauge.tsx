@@ -1,71 +1,90 @@
-function polar(cx: number, cy: number, r: number, deg: number) {
-  const rad = ((deg - 90) * Math.PI) / 180;
-  return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
-}
-
-function arcPath(cx: number, cy: number, r: number, start: number, end: number) {
-  const a = polar(cx, cy, r, start);
-  const b = polar(cx, cy, r, end);
-  const large = Math.abs(end - start) > 180 ? 1 : 0;
-  return `M ${a.x} ${a.y} A ${r} ${r} 0 ${large} 1 ${b.x} ${b.y}`;
-}
-
 type GaugeProps = {
   label: string;
   value: number | null | undefined;
   max?: number;
   unit?: string;
   tone?: "ok" | "warn" | "hot";
+  subtitle?: string;
 };
 
-export function Gauge({ label, value, max = 100, unit = "%", tone }: GaugeProps) {
-  const cx = 100;
-  const cy = 108;
-  const r = 76;
-  const start = -120;
-  const sweep = 240;
-  const pct = value == null || Number.isNaN(value) ? 0 : Math.max(0, Math.min(1, value / max));
-  const angle = start + pct * sweep;
-  const needle = polar(cx, cy, r - 10, angle);
-  const hub = polar(cx, cy, 8, angle);
-  const ticks = [0, 0.25, 0.5, 0.75, 1];
+export function Gauge({
+  label,
+  value,
+  max = 100,
+  unit = "%",
+  tone,
+  subtitle,
+}: GaugeProps) {
+  const hasValue = value != null && !Number.isNaN(value);
+  const numericVal = hasValue ? (value as number) : 0;
+  const pct = Math.max(0, Math.min(1, numericVal / max));
+
+  // 240-degree arc from 150deg to 390deg (cx=80, cy=74, r=54)
+  // Arc length = 2 * PI * 54 * (240 / 360) = 226.19
+  const arcLength = 226.19;
+  const strokeOffset = arcLength * (1 - pct);
+
+  // SVG path for 240-deg arc: starts at 150 deg, ends at 390 deg
+  const arcPath = "M 33.23 101.00 A 54 54 0 1 1 126.77 101.00";
+
+  let statusText = "OK";
+  if (!hasValue) {
+    statusText = "OFF";
+  } else if (tone === "hot") {
+    statusText = "CRIT";
+  } else if (tone === "warn") {
+    statusText = "WARN";
+  }
+
+  const toneClass = tone ? ` tone-${tone}` : " tone-default";
 
   return (
-    <article className={`gauge${tone ? ` ${tone}` : ""}`}>
-      <svg viewBox="0 0 200 150" className="gauge-svg">
-        <path className="gauge-track" d={arcPath(cx, cy, r, start, start + sweep)} />
-        {pct > 0.004 ? (
-          <path className="gauge-value" d={arcPath(cx, cy, r, start, angle)} />
-        ) : null}
-        {ticks.map((tick) => {
-          const deg = start + tick * sweep;
-          const outer = polar(cx, cy, r + 2, deg);
-          const inner = polar(cx, cy, r - 10, deg);
-          return (
-            <line
-              key={tick}
-              className="gauge-tick"
-              x1={inner.x}
-              y1={inner.y}
-              x2={outer.x}
-              y2={outer.y}
-            />
-          );
-        })}
-        <line
-          className="gauge-needle"
-          x1={hub.x}
-          y1={hub.y}
-          x2={needle.x}
-          y2={needle.y}
-        />
-        <circle className="gauge-hub" cx={cx} cy={cy} r="7" />
-      </svg>
-      <div className="gauge-read">
-        <strong>{value == null || Number.isNaN(value) ? "--" : Math.round(value)}</strong>
-        <span>{unit}</span>
+    <div className={`modern-dial-card${toneClass}`}>
+      <div className="dial-header">
+        <span className="dial-label">{label}</span>
+        <span className="dial-status-tag">{statusText}</span>
       </div>
-      <span className="gauge-label">{label}</span>
-    </article>
+
+      <div className="dial-visual-wrap">
+        <svg viewBox="0 0 160 116" className="dial-svg" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <filter id={`glow-${label}`} x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="2.5" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+          </defs>
+
+          {/* Background Track */}
+          <path
+            className="dial-track-bg"
+            d={arcPath}
+            fill="none"
+            strokeWidth="8"
+            strokeLinecap="round"
+          />
+
+          {/* Active Value Arc */}
+          <path
+            className="dial-track-fill"
+            d={arcPath}
+            fill="none"
+            strokeWidth="8"
+            strokeLinecap="round"
+            strokeDasharray={arcLength}
+            strokeDashoffset={hasValue ? strokeOffset : arcLength}
+            filter={`url(#glow-${label})`}
+          />
+        </svg>
+
+        {/* Center Digital Telemetry Display */}
+        <div className="dial-center-telemetry">
+          <div className="dial-value-row">
+            <span className="dial-num">{hasValue ? Math.round(numericVal) : "--"}</span>
+            <span className="dial-unit">{unit}</span>
+          </div>
+          {subtitle && <span className="dial-sub-info">{subtitle}</span>}
+        </div>
+      </div>
+    </div>
   );
 }
